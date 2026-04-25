@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 
 vi.mock('@splinetool/react-spline', () => ({
@@ -9,6 +9,11 @@ vi.mock('@splinetool/react-spline', () => ({
 }))
 
 describe('SENTINEL AI landing page', () => {
+  afterEach(() => {
+    cleanup()
+    window.history.pushState({}, '', '/')
+  })
+
   it('renders the requested nav, hero copy, CTAs, and Spline scene', async () => {
     render(<App />)
 
@@ -38,5 +43,36 @@ describe('SENTINEL AI landing page', () => {
       'data-scene',
       'https://prod.spline.design/Slk6b8kz3LRlKiyk/scene.splinecode',
     )
+  })
+
+  it('renders the gold reference when requested through the URL', async () => {
+    window.history.pushState({}, '', '/?variant=gold')
+
+    const { container } = render(<App />)
+
+    expect(container.firstElementChild).toHaveClass('theme-gold')
+    expect(await screen.findByTestId('spline-scene')).toHaveClass('sepia-[0.55]')
+    expect(screen.getByRole('heading', { name: 'SENTINEL AI' })).toHaveClass(
+      'text-transparent',
+    )
+  })
+
+  it('switches between green and gold references from the page control', async () => {
+    const { container } = render(<App />)
+
+    expect(container.firstElementChild).not.toHaveClass('theme-gold')
+    expect(await screen.findByTestId('spline-scene')).not.toHaveClass('sepia-[0.55]')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Gold' }))
+
+    expect(container.firstElementChild).toHaveClass('theme-gold')
+    expect(window.location.search).toBe('?variant=gold')
+    expect(await screen.findByTestId('spline-scene')).toHaveClass('sepia-[0.55]')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Green' }))
+
+    expect(container.firstElementChild).not.toHaveClass('theme-gold')
+    expect(window.location.search).toBe('')
+    expect(await screen.findByTestId('spline-scene')).not.toHaveClass('sepia-[0.55]')
   })
 })

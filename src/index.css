@@ -24,6 +24,19 @@
     --hero-bg: 0 0% 8%;
   }
 
+  .theme-gold {
+    --primary: 50 100% 59%;
+    --secondary: 42 22% 18%;
+    --muted: 42 14% 15%;
+    --muted-foreground: 42 12% 64%;
+    --accent: 39 100% 58%;
+    --border: 42 20% 22%;
+    --input: 42 20% 22%;
+    --ring: 50 100% 59%;
+    --nav-button: 42 28% 17%;
+    --hero-bg: 36 35% 5%;
+  }
+
   * {
     @apply border-border;
   }

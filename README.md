@@ -2,6 +2,11 @@
 
 A compact public demo showing a full-screen dark security-company landing page with an embedded Spline 3D background.
 
+## Live References
+
+- Green: https://afinagen.github.io/sentinel-ai-spline-hero-demo/
+- Gold: https://afinagen.github.io/sentinel-ai-spline-hero-demo/?variant=gold
+
 ## Stack
 
 - React
